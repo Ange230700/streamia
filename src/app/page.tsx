@@ -1,9 +1,11 @@
 // src\app\page.tsx
 
+import { Button } from "primereact/button";
+
 export default function Home() {
   return (
     <div>
-      <h1>Hello world</h1>
+      <Button label="Submit" />
     </div>
   );
 }
