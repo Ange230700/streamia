@@ -6,15 +6,10 @@ import "@testing-library/jest-dom";
 import Navbar from "@/app/components/Navbar";
 
 jest.mock("next/link", () => {
-  const MockLink = ({
+  const MockLink: React.FC<{ href: string; children: React.ReactNode }> = ({
     href,
     children,
-  }: {
-    href: string;
-    children: React.ReactNode;
-  }) => {
-    return <a href={href}>{children}</a>;
-  };
+  }) => <a href={href}>{children}</a>;
   MockLink.displayName = "NextLink";
   return MockLink;
 });
@@ -26,7 +21,13 @@ jest.mock("primereact/api", () => ({
 }));
 
 jest.mock("primereact/menubar", () => ({
-  Menubar: ({ start, end }: any) => (
+  Menubar: ({
+    start,
+    end,
+  }: {
+    start?: React.ReactNode;
+    end?: React.ReactNode;
+  }) => (
     <div data-testid="menubar">
       {start}
       {end}
@@ -35,17 +36,22 @@ jest.mock("primereact/menubar", () => ({
 }));
 
 jest.mock("primereact/inputtext", () => ({
-  InputText: (props: any) => <input data-testid="search-input" {...props} />,
+  InputText: (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+    <input data-testid="search-input" {...props} />
+  ),
 }));
 
 jest.mock("primereact/button", () => ({
-  Button: (props: any) => (
-    <button
-      {...props}
-      data-testid={props["aria-label"] ?? props.label ?? props.icon}
-    >
-      {props.label ?? props.icon}
-    </button>
+  Button: ({
+    label,
+    icon,
+    "aria-label": ariaLabel,
+  }: {
+    label?: string;
+    icon?: string;
+    "aria-label"?: string;
+  }) => (
+    <button data-testid={ariaLabel ?? label ?? icon}>{label ?? icon}</button>
   ),
 }));
 
