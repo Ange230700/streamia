@@ -1,0 +1,9 @@
+# .prettierignore
+
+# Ignore artifacts:
+build
+coverage
+**/.git
+**/.svn
+**/.hg
+**/node_modules
