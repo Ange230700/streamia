@@ -7,6 +7,7 @@ import "./globals.css";
 import "primereact/resources/themes/lara-dark-blue/theme.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
+import Navbar from "@/app/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
       >
-        <PrimeReactProvider>{children}</PrimeReactProvider>
+        <PrimeReactProvider>
+          <header>
+            <Navbar />
+          </header>
+          <main className="flex flex-1 flex-col p-4">{children}</main>
+        </PrimeReactProvider>
       </body>
     </html>
   );
