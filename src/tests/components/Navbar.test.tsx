@@ -3,7 +3,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { PrimeReactProvider } from "primereact/api";
 import Navbar from "@/app/components/Navbar";
 
 jest.mock("next/link", () => {
@@ -16,17 +15,43 @@ jest.mock("next/link", () => {
   }) => {
     return <a href={href}>{children}</a>;
   };
-  MockLink.displayName = "MockLink";
+  MockLink.displayName = "NextLink";
   return MockLink;
 });
 
+jest.mock("primereact/api", () => ({
+  PrimeReactProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
+jest.mock("primereact/menubar", () => ({
+  Menubar: ({ start, end }: any) => (
+    <div data-testid="menubar">
+      {start}
+      {end}
+    </div>
+  ),
+}));
+
+jest.mock("primereact/inputtext", () => ({
+  InputText: (props: any) => <input data-testid="search-input" {...props} />,
+}));
+
+jest.mock("primereact/button", () => ({
+  Button: (props: any) => (
+    <button
+      {...props}
+      data-testid={props["aria-label"] ?? props.label ?? props.icon}
+    >
+      {props.label ?? props.icon}
+    </button>
+  ),
+}));
+
 describe("Navbar", () => {
   beforeEach(() => {
-    render(
-      <PrimeReactProvider>
-        <Navbar />
-      </PrimeReactProvider>,
-    );
+    render(<Navbar />);
   });
 
   it("renders Streamia as a link to the homepage", () => {
